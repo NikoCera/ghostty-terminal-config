@@ -41,7 +41,7 @@ macos-dock-drop-behavior = new-tab
 macos-option-as-alt = true
 background-opacity = 0.92
 background-blur = 20
-window-save-state = never
+window-save-state = always
 
 # ==============================================================================
 # 光标
