@@ -4,10 +4,12 @@
 # font-family: 终端字体，需要 Nerd Font 版本才能显示图标
 # font-size: 字号
 # font-thicken: 字体加粗渲染，macOS Retina 屏上更清晰
+# font-feature: 关闭常见编程连字，让操作符保持原始形状
 # adjust-cell-height: 行间距，0 为默认紧凑，可调大（如 10%、20%）增加行距
 font-family = "Maple Mono NF"
 font-size = 13
 font-thicken = true
+font-feature = -calt, -liga, -dlig
 adjust-cell-height = 0
 
 # ==============================================================================
@@ -23,13 +25,22 @@ theme = "Catppuccin Mocha"
 # macos-titlebar-style: tabs 让标签页融入标题栏，更简洁
 # background-opacity: 背景透明度，0.92 微透明能隐约看到桌面壁纸
 # background-blur: 毛玻璃模糊强度，配合半透明使用（值越大越模糊，true=20）
-# window-save-state: 退出后保留窗口状态（分屏、标签页、窗口大小位置），下次启动自动恢复
+# window-save-state: never 表示每次用下面配置的窗口尺寸启动，不恢复上次窗口状态
 window-padding-x = 12
 window-padding-y = 8
+window-padding-balance = true
+window-padding-color = background
+window-width = 108
+window-height = 32
 macos-titlebar-style = tabs
+macos-window-shadow = true
+window-title-font-family = "Maple Mono NF"
+window-new-tab-position = current
+macos-dock-drop-behavior = new-tab
+macos-option-as-alt = true
 background-opacity = 0.92
 background-blur = 20
-window-save-state = always
+window-save-state = never
 
 # ==============================================================================
 # 光标
@@ -43,10 +54,23 @@ cursor-style-blink = true
 # 交互
 # ==============================================================================
 # copy-on-select: 鼠标选中文本自动复制到剪贴板
+# right-click-action: 鼠标右键直接粘贴剪贴板内容
+# clipboard-paste-protection: 粘贴疑似危险内容前先确认
+# clipboard-trim-trailing-spaces: 复制终端文本时去掉行尾空格
 # confirm-close-surface: 关闭窗口时不弹确认框
 # mouse-hide-while-typing: 打字时自动隐藏鼠标光标
+# scrollback-limit: 保留更多滚动历史，方便回看长输出
 # shell-integration: 启用 zsh shell 集成（支持命令跳转等功能）
 copy-on-select = clipboard
+right-click-action = paste
+clipboard-paste-protection = true
+clipboard-paste-bracketed-safe = true
+clipboard-trim-trailing-spaces = true
 confirm-close-surface = false
 mouse-hide-while-typing = true
+scrollback-limit = 100000
+unfocused-split-opacity = 0.86
+split-divider-color = #2b313c
 shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+quit-after-last-window-closed = true
