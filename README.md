@@ -1,30 +1,30 @@
 # Ghostty Terminal Config
 
-macOS 下基于 Ghostty + Starship + zsh 插件的终端美化方案，从 iTerm2 + oh-my-zsh 迁移而来，更轻量更快。
+macOS 下基于 Ghostty + Starship + Deja + zsh 插件的终端美化方案，从 iTerm2 + oh-my-zsh 迁移而来，更轻量更快。
 
 ## 效果
 
 - 彩虹条提示符（基于 Starship 官方 catppuccin-powerline 预设，启用换行显示）
 - 半透明毛玻璃窗口
-- 语法高亮、自动建议、模糊搜索
+- 语法高亮、Deja 自动建议、模糊搜索
 
 ## 包含的配置文件
 
 | 文件 | 说明 | 安装位置 |
 |------|------|---------|
-| `ghostty/config` | Ghostty 终端配置（字体、主题、窗口、光标） | `~/.config/ghostty/config` |
+| `ghostty/config` | Ghostty 终端配置（字体、主题、窗口、光标） | `~/.config/ghostty/config.ghostty` |
 | `starship/starship.toml` | Starship 彩虹条提示符配置（官方预设 + 换行） | `~/.config/starship.toml` |
 | `zsh/.zshrc` | zsh 配置（插件、工具、别名、快捷键） | `~/.zshrc` |
 
 ## 一键安装
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/justhalfbit/ghostty-terminal-config/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/NikoCera/ghostty-terminal-config/codex/my-ghostty/install.sh)
 ```
 
 安装前会询问确认，确认后自动执行：
 1. 通过 Homebrew 安装所有依赖
-2. 备份已有 Ghostty 和 Starship 配置文件
+2. 备份已有 Ghostty、Starship 和 zsh 配置文件
 3. 安装 Ghostty 和 Starship 配置（覆盖）
 4. 将 zsh 配置追加到 `~/.zshrc` 尾部（不覆盖用户已有内容）
 
@@ -36,8 +36,9 @@ bash <(curl -fsSL https://raw.githubusercontent.com/justhalfbit/ghostty-terminal
 
 | 备份文件 | 原始位置 |
 |---------|---------|
-| `~/.config-backup/<时间戳>/ghostty-config` | `~/.config/ghostty/config` |
+| `~/.config-backup/<时间戳>/ghostty-config.ghostty` | `~/.config/ghostty/config.ghostty` |
 | `~/.config-backup/<时间戳>/starship.toml` | `~/.config/starship.toml` |
+| `~/.config-backup/<时间戳>/zshrc` | `~/.zshrc` |
 
 恢复命令：
 
@@ -46,8 +47,9 @@ bash <(curl -fsSL https://raw.githubusercontent.com/justhalfbit/ghostty-terminal
 ls ~/.config-backup/
 
 # 恢复（替换 <时间戳> 为实际目录名）
-cp ~/.config-backup/<时间戳>/ghostty-config ~/.config/ghostty/config
+cp ~/.config-backup/<时间戳>/ghostty-config.ghostty ~/.config/ghostty/config.ghostty
 cp ~/.config-backup/<时间戳>/starship.toml ~/.config/starship.toml
+cp ~/.config-backup/<时间戳>/zshrc ~/.zshrc
 ```
 
 ### 卸载 zsh 配置
@@ -65,7 +67,7 @@ cp ~/.config-backup/<时间戳>/starship.toml ~/.config/starship.toml
 | [eza](https://github.com/eza-community/eza) | 替代 ls，彩色图标 |
 | [bat](https://github.com/sharkdp/bat) | 替代 cat，语法高亮 |
 | [yazi](https://github.com/sxyazi/yazi) | 终端文件管理器 |
-| [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | 历史命令自动建议 |
+| [Deja](https://github.com/Giammarco-Ferranti/deja) | 历史、目录和命令序列自动建议 |
 | [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) | 命令语法高亮 |
 | [zsh-completions](https://github.com/zsh-users/zsh-completions) | Tab 补全增强 |
 | [Maple Mono NF](https://github.com/subframe7536/maple-font) | 终端字体（Nerd Font，中文显示优秀） |
@@ -77,20 +79,21 @@ cp ~/.config-backup/<时间戳>/starship.toml ~/.config/starship.toml
 ```bash
 brew install --cask font-maple-mono-nf
 brew install --cask ghostty
-brew install starship fzf zoxide eza bat yazi zsh-autosuggestions zsh-syntax-highlighting zsh-completions
+brew install starship fzf zoxide eza bat yazi zsh-syntax-highlighting zsh-completions
+brew install giammarco-ferranti/deja/deja
 ```
 
 ### 2. 下载配置文件
 
 ```bash
-git clone --depth 1 https://github.com/justhalfbit/ghostty-terminal-config.git /tmp/ghostty-config
+git clone --depth 1 --branch codex/my-ghostty https://github.com/NikoCera/ghostty-terminal-config.git /tmp/ghostty-config
 ```
 
 ### 3. 安装配置文件
 
 ```bash
 mkdir -p ~/.config/ghostty
-cp /tmp/ghostty-config/ghostty/config ~/.config/ghostty/config
+cp /tmp/ghostty-config/ghostty/config ~/.config/ghostty/config.ghostty
 cp /tmp/ghostty-config/starship/starship.toml ~/.config/starship.toml
 cat /tmp/ghostty-config/zsh/.zshrc >> ~/.zshrc
 ```
@@ -115,10 +118,10 @@ rm -rf /tmp/ghostty-config
 
 | 快捷键 | 功能 |
 |--------|------|
-| `Ctrl+F` | 接受自动建议 |
+| `→` / `Ctrl+F` | 接受 Deja 自动建议 |
 | `Ctrl+R` | fzf 模糊搜索历史命令 |
 | `Ctrl+T` | fzf 模糊搜索文件 |
-| `Tab` | 补全，连续按在候选列表中移动 |
+| `Tab` | 有 Deja 建议时切换候选，否则触发补全 |
 
 ## 别名速查
 

@@ -12,8 +12,9 @@
 #   3. 从 GitHub 下载配置文件到目标位置
 #
 # 恢复备份:
-#   cp ~/.config-backup/<时间戳>/ghostty-config ~/.config/ghostty/config
+#   cp ~/.config-backup/<时间戳>/ghostty-config.ghostty ~/.config/ghostty/config.ghostty
 #   cp ~/.config-backup/<时间戳>/starship.toml ~/.config/starship.toml
+#   cp ~/.config-backup/<时间戳>/zshrc ~/.zshrc
 #
 # 卸载 zsh 配置:
 #   删除 ~/.zshrc 中 ">>> ghostty-terminal-config >>>" 到 "<<< ghostty-terminal-config <<<" 之间的内容
@@ -21,7 +22,8 @@
 
 set -e
 
-REPO_URL="https://github.com/justhalfbit/ghostty-terminal-config.git"
+REPO_URL="${REPO_URL:-https://github.com/NikoCera/ghostty-terminal-config.git}"
+REPO_REF="${REPO_REF:-codex/my-ghostty}"
 BACKUP_DIR="$HOME/.config-backup/$(date +%Y%m%d_%H%M%S)"
 TMP_DIR="$(mktemp -d)"
 
@@ -41,7 +43,7 @@ echo "======================================"
 echo ""
 echo "本脚本将执行以下操作:"
 echo "  1. 通过 Homebrew 安装终端工具和字体"
-echo "  2. 备份已有 Ghostty 和 Starship 配置到 ~/.config-backup/"
+echo "  2. 备份已有 Ghostty、Starship 和 zsh 配置到 ~/.config-backup/"
 echo "  3. 安装新的终端配置（Ghostty + Starship + zsh）"
 echo ""
 echo "已有配置将备份到: $BACKUP_DIR"
@@ -77,13 +79,14 @@ if [ ! -d "/Applications/Ghostty.app" ]; then
 else
   echo "    Ghostty 已安装，跳过。"
 fi
-brew install starship fzf zoxide eza bat yazi zsh-autosuggestions zsh-syntax-highlighting zsh-completions
+brew install starship fzf zoxide eza bat yazi zsh-syntax-highlighting zsh-completions
+brew install giammarco-ferranti/deja/deja
 
 # ==============================================================================
 # 下载配置文件
 # ==============================================================================
 echo "==> 下载配置文件..."
-git clone --depth 1 "$REPO_URL" "$TMP_DIR/repo"
+git clone --depth 1 --branch "$REPO_REF" "$REPO_URL" "$TMP_DIR/repo"
 
 # ==============================================================================
 # 备份已有配置
@@ -106,8 +109,10 @@ backup_file() {
   fi
 }
 
+backup_file ~/.config/ghostty/config.ghostty "ghostty-config.ghostty"
 backup_file ~/.config/ghostty/config "ghostty-config"
 backup_file ~/.config/starship.toml "starship.toml"
+backup_file ~/.zshrc "zshrc"
 
 if [ -d "$BACKUP_DIR" ]; then
   echo ""
@@ -123,9 +128,9 @@ fi
 echo "==> 安装配置文件..."
 mkdir -p ~/.config/ghostty
 
-cp "$TMP_DIR/repo/ghostty/config" ~/.config/ghostty/config
+cp "$TMP_DIR/repo/ghostty/config" ~/.config/ghostty/config.ghostty
 cp "$TMP_DIR/repo/starship/starship.toml" ~/.config/starship.toml
-echo "    ✓ ~/.config/ghostty/config"
+echo "    ✓ ~/.config/ghostty/config.ghostty"
 echo "    ✓ ~/.config/starship.toml"
 
 # .zshrc 追加到用户已有配置尾部（不覆盖）
@@ -155,8 +160,9 @@ echo "请重启 Ghostty 终端生效。"
 echo ""
 if [ -d "$BACKUP_DIR" ]; then
   echo "恢复旧配置:"
-  echo "  cp $BACKUP_DIR/ghostty-config ~/.config/ghostty/config"
+  echo "  cp $BACKUP_DIR/ghostty-config.ghostty ~/.config/ghostty/config.ghostty"
   echo "  cp $BACKUP_DIR/starship.toml ~/.config/starship.toml"
+  echo "  cp $BACKUP_DIR/zshrc ~/.zshrc"
   echo ""
 fi
 echo "卸载 zsh 配置:"
